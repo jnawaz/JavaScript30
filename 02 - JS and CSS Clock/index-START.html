@@ -62,13 +62,52 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
 
   </style>
 
   <script>
 
+    const INITIAL_ROTATION_OFFSET = 90;
+    const secondsHand = document.querySelector('.second-hand');
+    const minutesHand = document.querySelector('.min-hand');
+    const hoursHand = document.querySelector('.hour-hand');
 
+    function inDegrees(timeElement, isHours) {
+      let divider = 60;
+      if (isHours) { divider = 12}
+      return ((timeElement / divider) * 360) + INITIAL_ROTATION_OFFSET;
+    }
+
+    function setDate() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      // Degress on the clock face
+      const secondsDegrees = inDegrees(seconds, false);
+      const minutesDegrees = inDegrees(minutes, false);
+      const hoursDegrees = inDegrees(hours, true);
+
+      secondsHand.style.transform = `rotate(${secondsDegrees}deg)`;
+      console.log(seconds);
+      hoursHand.style.transform = `rotate(${hoursDegrees}deg)`;
+      console.log(hours);
+      minutesHand.style.transform = `rotate(${minutesDegrees}deg)`;
+      console.log(minutes);
+
+      //TODO: fix bug where hand reaches the 360 then resets back to beginning.
+    }
+
+    setInterval(setDate, 1000); //run setDate every second
+
+    // Prevents the delay in displaying the time.
+    setDate();
   </script>
 </body>
 </html>
